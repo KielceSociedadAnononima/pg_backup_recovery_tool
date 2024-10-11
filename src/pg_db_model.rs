@@ -6,7 +6,8 @@ use serde::{Deserialize, Serialize};
 pub struct PostgresDB {
     pub port:i32,
     pub folder_instance: String,
-    pub folder_output: String
+    pub folder_output: String,
+    pub deledbname: Vec<String>
 }
 
 

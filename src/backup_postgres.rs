@@ -3,6 +3,7 @@ use std::process::{exit, Command};
 use crate::pg_db_model::PostgresDB;
 
 #[allow(dead_code)]
+///Ejecuta un commando sobre la instancia de Postgres definida en el model, pra generar una copia de seguridad.
 pub fn generate_dump_all(model_db: PostgresDB)
 {
     let program = format!("{}\\{}",model_db.folder_instance, "pg_dumpall.exe");

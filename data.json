@@ -1,5 +1,9 @@
 {
-    "port":5432,
+    "port":5434,
     "folder_instance":"C:\\CFERondanetPostgresSQL\\13\\",
-    "folder_output":"C:\\Users\\Usuario\\Desktop\\"
+    "folder_output":"C:\\Users\\Usuario\\Desktop\\",
+    "deledbname" : [
+        "ml_kielce_kielceprod",
+        "ml_kielce_kielcetest"
+    ]
 }
