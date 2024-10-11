@@ -1,4 +1,4 @@
-use std::{ fs::File, io::{self, BufReader, Error, Read}};
+use std::{ fs::File, io::{self, BufReader, Error, Read}, path::PathBuf};
 use serde::{Deserialize, Serialize};
 
 
@@ -14,7 +14,7 @@ pub struct PostgresDB {
 ///Implementacion estandar para el modelo PostgresDB
 impl PostgresDB {
     #[allow(dead_code)]
-    pub fn load_from_json(path:&str)-> Result<PostgresDB, Error>
+    pub fn load_from_json(path:&PathBuf)-> Result<PostgresDB, Error>
     {
         let archivo = match File::open(path) {
             Ok(data) => data,
@@ -26,7 +26,7 @@ impl PostgresDB {
         let mut buffer = BufReader::new(archivo);
         let mut data = String::new();
         if let Err(bad) = buffer.read_to_string(&mut data) {
-            return Err(io::Error::new(io::ErrorKind::NotFound,bad)) 
+            return Err(io::Error::new(io::ErrorKind::InvalidData,bad)) 
         }
         let obj : PostgresDB = serde_json::from_str(&data).unwrap();        
         Ok(obj)

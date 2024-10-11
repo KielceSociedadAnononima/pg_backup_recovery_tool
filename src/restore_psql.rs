@@ -1,4 +1,4 @@
-use std::process::{exit, Command};
+use std::{path::PathBuf, process::{exit, Command}};
 
 use crate::pg_db_model::PostgresDB;
 
@@ -6,7 +6,7 @@ use crate::pg_db_model::PostgresDB;
 
 
 #[allow(dead_code)]
-pub fn restaurar_base_datos(model_db: PostgresDB,ruta_file : &str)
+pub fn restaurar_base_datos(model_db: PostgresDB,ruta_file : &PathBuf)
 {   
     let psql = format!("{}{}",model_db.folder_instance, "psql.exe");
     //Intentar levantar el archivo
