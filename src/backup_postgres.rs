@@ -10,7 +10,7 @@ pub fn generate_dump_all(model_db: PostgresDB)
     let ruta = Path::new(model_db.folder_instance.as_str());
     let j1 = &ruta.join("pg_dumpall.exe");
 
-    let output = Path::new(model_db.folder_output.as_str()).join("respladomodulo.sql");
+    let output = Path::new(model_db.folder_output.as_str()).join("respaldomodulo.sql");
     match Command::new(j1.to_str().unwrap())
         .arg("-U")
         .arg("postgres")
