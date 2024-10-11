@@ -9,13 +9,15 @@ pub fn generate_dump_all(model_db: PostgresDB)
 {
     let ruta = Path::new(model_db.folder_instance.as_str());
     let j1 = &ruta.join("pg_dumpall.exe");
+
+    let output = Path::new(model_db.folder_output.as_str()).join("respladomodulo.sql");
     match Command::new(j1.to_str().unwrap())
         .arg("-U")
         .arg("postgres")
         .arg("-p")
         .arg(model_db.port.to_string())
         .arg("-f")
-        .arg(format!("{}.respaldo_modulo.sql",model_db.folder_output))
+        .arg(output.to_str().unwrap())
         .stderr(Stdio::inherit())
         .stdin(Stdio::null())
         .stdout(Stdio::inherit())
@@ -30,13 +32,13 @@ pub fn generate_dump_all(model_db: PostgresDB)
                     exit(1)
                 },
                 Err(bad) => {
-                    eprintln!("{:?}",bad);
+                    eprintln!("Error func chid arms{:?}",bad);
                     exit(1)
                 }
             }
         },
         Err(err) => {
-            eprintln!("{:?}",err);
+            eprintln!("Error command backup fail:{:?}",err);
             exit(1)
         }
     }
