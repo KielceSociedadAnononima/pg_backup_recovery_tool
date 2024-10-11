@@ -1,4 +1,4 @@
-use std::{path::{Path, PathBuf}, process::{exit, Command}};
+use std::{path::{Path, PathBuf}, process::{exit, Command, Stdio}};
 
 use crate::pg_db_model::PostgresDB;
 
@@ -21,6 +21,9 @@ pub fn restaurar_base_datos(model_db: PostgresDB,ruta_file : &PathBuf)
         .arg(model_db.port.to_string())
         .arg("-c") // Comando a ejecutar
         .arg(query_sql)
+        .stderr(Stdio::inherit())
+        .stdin(Stdio::inherit())
+        .stdout(Stdio::inherit())
         .spawn()
         {
             Ok(_good) =>{
@@ -42,6 +45,9 @@ pub fn restaurar_base_datos(model_db: PostgresDB,ruta_file : &PathBuf)
         .arg(model_db.port.to_string())
         .arg("-f")
         .arg(ruta_file)
+        .stderr(Stdio::inherit())
+        .stdin(Stdio::inherit())
+        .stdout(Stdio::inherit())
         .spawn() {
         Ok(_good) =>{
             println!(r#"Base de datos restaurada correctamente"#)
