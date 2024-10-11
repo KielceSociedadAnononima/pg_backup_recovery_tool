@@ -1,5 +1,5 @@
 
-use std::process::{exit, Command, Stdio};
+use std::{path::Path, process::{exit, Command, Stdio}};
 
 use crate::pg_db_model::PostgresDB;
 
@@ -7,8 +7,9 @@ use crate::pg_db_model::PostgresDB;
 ///Ejecuta un commando sobre la instancia de Postgres definida en el model, pra generar una copia de seguridad.
 pub fn generate_dump_all(model_db: PostgresDB)
 {
-    let program = format!("{}\\{}",model_db.folder_instance, "pg_dumpall.exe");
-    match Command::new(program)
+    let ruta = Path::new(model_db.folder_instance.as_str());
+    let j1 = &ruta.join("pg_dumpall.exe");
+    match Command::new(j1.to_str().unwrap())
         .arg("-U")
         .arg("postgres")
         .arg("-P")
