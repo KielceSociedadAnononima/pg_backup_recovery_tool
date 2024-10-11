@@ -35,7 +35,7 @@ pub fn restaurar_base_datos(model_db: PostgresDB,ruta_file : &PathBuf)
     }
     //Mando el commando de restore
 
-    match Command::new("cmd")
+    match Command::new(&psql)
         .arg("-U")
         .arg("postgres")
         .arg("-p")
