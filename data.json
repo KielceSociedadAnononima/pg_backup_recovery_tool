@@ -1,6 +1,6 @@
 {
-    "port":5434,
-    "folder_instance":"C:\\CFERondanetPostgresSQL\\13\\",
+    "port":5432,
+    "folder_instance":"C:\\Program Files\\pgAdmin 4\\runtime\\",
     "folder_output":"C:\\Users\\Usuario\\Desktop\\",
     "deledbname" : [
         "ml_kielce_kielceprod",
