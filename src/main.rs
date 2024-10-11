@@ -1,5 +1,6 @@
 use clap::{command, Arg, ArgAction, Command};
 use pg_db_model::PostgresDB;
+use restore_psql::restaurar_base_datos;
 
 
 //Importacion de modulos
@@ -32,11 +33,20 @@ fn main()
         .short_flag('r')
         .arg(
             Arg::new("config")
+                .action(ArgAction::Append)
+                .help("Proveer un Json con el modelo de datos, indicando puerto, carpeta de la instanica de BBDD, y ruta de salida.")
+                .required(true)
+
+        )
+        .arg(
+            Arg::new("archivo")
             .action(ArgAction::Append)
-            .help("Proveer un Json con el modelo de datos, indicando puerto, carpeta de la instanica de BBDD, y ruta de salida.")
+            .help("Proveer la ruta del archivo sql que se genero durante el respaldo.")
             .required(true)
         )
     )
+    .about("PTechSoftware Tool para Respaldar/Restaurar Modulo Local de Rondanet Kielce S.A.")
+    .author("Ignacio Perez Panizza")
     .get_matches();
 
     /**************************************************************************** */
@@ -44,7 +54,7 @@ fn main()
     /**************************************************************************** */
     match opciones.subcommand() {
         Some(("backup", sub_m)) => {
-            if let Some(_ruta) = sub_m.get_one::<String>("config"){
+            if let Some(_ruta) = sub_m.get_one::<String>("config") {
                 match PostgresDB::load_from_json(_ruta) {
                     Ok(model) =>{
                         backup_postgres::generate_dump_all(model);
@@ -57,8 +67,16 @@ fn main()
                 eprintln!("Ingrese un parametro valido. Corra el programa con -h para ver las opciones.");
             }
         }
-        Some(("restore", sub_m)) => {
-            if let Some(_ruta) = sub_m.get_one::<String>("config"){
+        Some(("restore", sub_m)) => { 
+            if let (Some(_ruta), Some(_respaldo)) = (sub_m.get_one::<String>("config"), sub_m.get_one::<String>("archivo")) {
+                match PostgresDB::load_from_json(_ruta) {
+                    Ok(model) =>{
+                        restaurar_base_datos(model, &_respaldo);
+                    },
+                    Err(_wrong)=>{
+                        eprintln!("{:?}",_wrong);
+                    }
+                }
             }else {
                 eprintln!("Ingrese un parametro valido. Corra el programa con -h para ver las opciones.");
             }

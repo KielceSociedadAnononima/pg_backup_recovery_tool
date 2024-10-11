@@ -1,5 +1,6 @@
 
-use std::process::{exit, Command};
+use std::process::{exit, Command, Stdio};
+
 use crate::pg_db_model::PostgresDB;
 
 #[allow(dead_code)]
@@ -14,16 +15,27 @@ pub fn generate_dump_all(model_db: PostgresDB)
         .arg(model_db.port.to_string())
         .arg("-f")
         .arg(format!("{}.respaldo_modulo.sql",model_db.folder_output))
+        .stderr(Stdio::inherit())
+        .stdin(Stdio::null())
+        .stdout(Stdio::inherit())
         .spawn() {
         Ok(mut res) => {
-            let estado = res.wait();
-            if estado.is_ok() {
-                exit(0)
+
+            match res.wait() {
+                Ok(_good) =>{
+                    if let Some(ext_code) = _good.code() {
+                        exit(ext_code)
+                    }
+                    exit(1)
+                },
+                Err(bad) => {
+                    eprintln!("{:?}",bad);
+                    exit(1)
+                }
             }
-            exit(1)
         },
         Err(err) => {
-            eprint!("{:?}",err);
+            eprintln!("{:?}",err);
             exit(1)
         }
     }
