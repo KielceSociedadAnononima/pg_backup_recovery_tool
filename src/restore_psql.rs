@@ -13,7 +13,7 @@ pub fn restaurar_base_datos(model_db: PostgresDB,ruta_file : &PathBuf)
     //Borrar las bases de datos que estan registradas    
     for db_name in &model_db.deledbname {
 
-        let query_sql = format!("DROP DATABASE {};",db_name);
+        let query_sql = format!("DROP DATABASE IF EXISTS  {} CASCADE;",db_name);
         match  Command::new(&psql)
         .arg("-U") // Usuario de PostgreSQL
         .arg("postgres")
@@ -37,14 +37,15 @@ pub fn restaurar_base_datos(model_db: PostgresDB,ruta_file : &PathBuf)
         }         
     }
     //Mando el commando de restore
-
-    match Command::new(&psql)
+    for el in model_db.deledbname {
+        match Command::new(&psql)
         .arg("-U")
         .arg("postgres")
         .arg("-p")
         .arg(model_db.port.to_string())
         .arg("-f")
         .arg(ruta_file)
+        .arg(&el)
         .stderr(Stdio::inherit())
         .stdin(Stdio::inherit())
         .stdout(Stdio::inherit())
@@ -58,4 +59,6 @@ pub fn restaurar_base_datos(model_db: PostgresDB,ruta_file : &PathBuf)
         }
     }
 
+    }
+    
 }
